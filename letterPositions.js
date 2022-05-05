@@ -1,20 +1,20 @@
 const letterPositions = function(sentence) {
   const results = {};
-  for (index in sentence) {
+  for (const index in sentence) {
     if (sentence[index] !== ' ') {
       if (results[sentence[index]]) results[sentence[index]].push(Number(index));
       if (!results[sentence[index]]) results[sentence[index]] = [Number(index)];
     }
   }
   return results;
-}
+};
 
 const assertObjectEqual = function(actual, expected) {
   let isEqual = true;
   
-  for (key in actual) {
+  for (const key in actual) {
     if (!assertArraysEqual(actual[key],expected[key])) {
-      isEqual = false; 
+      isEqual = false;
       break;
     }
   }
@@ -43,7 +43,7 @@ const assertArraysEqual = function(firstArray, secondArray) {
   return true;
 };
 
-assertObjectEqual({ 
+assertObjectEqual({
   l: [0],
   i: [1, 11],
   g: [2],

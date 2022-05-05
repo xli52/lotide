@@ -1,7 +1,7 @@
 const countLetters = function(sentence) {
   sentence = sentence.split(' ').join('');
   const results = {};
-  for (char of sentence) {
+  for (const char of sentence) {
     if (results[char]) results[char]++;
     if (!results[char]) results[char] = 1;
   }
@@ -12,9 +12,9 @@ const countLetters = function(sentence) {
 const assertObjectEqual = function(actual, expected) {
   let isEqual = true;
   
-  for (key in actual) {
+  for (const key in actual) {
     if (actual[key] !== expected[key]) {
-      isEqual = false; 
+      isEqual = false;
       break;
     }
   }
