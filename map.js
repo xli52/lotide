@@ -33,4 +33,4 @@ const assertArraysEqual = function(firstArray, secondArray) {
 
 const result1 = map(words, word => word[0]);
 
-assertArraysEqual(result1, ["g", "c", "t", "m", "t"])
+assertArraysEqual(result1, ["g", "c", "t", "m", "t"]);
