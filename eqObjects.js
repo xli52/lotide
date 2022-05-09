@@ -1,51 +1,80 @@
-const eqObjects = function(object1, object2) {
-
-  //Check if two objects has same number of keys
-  if (Object.keys(object1).length !== Object.keys(object2).length) return false;
-  
-  //Loop through all keys in object1 to find if there is same key and value pair in object2.
-  for (const key in object1) {
-    //Check if key exist in object2
-    if (!object2[key]) return false;
-    //If value of key is an array, compare two arrays
-    if (Array.isArray(object1[key])) {
-      if (!eqArrays(object1[key], object2[key])) return false;
-    }
-    //If it's no an array, compare them directly
-    if (!Array.isArray(object1[key])) {
-      if (object2[key] !== object1[key]) return false;
-    }
-  }
-
-  return true;
+const isPrimitive = function(test) {
+  return test !== Object(test);
 };
 
-const eqArrays = function(firstArray, secondArray) {
-  //Edge cases: check if two arrays have some amount of items and length are not zero.
-  if (firstArray.length !== secondArray.length) {
-    return false;
+const eqObjects = function(object1, object2) {
+
+  //Check if object1 and object2 are primitive type (string, number, boolean, null, undefined, NaN)
+  if (isPrimitive(object1)) {
+    //Check if both are NaN (since NaN === NaN is false)
+    if (Number.isNaN(object1) && Number.isNaN(object2)) return true;
+
+    //Now object1 must be a string, number, boolean, null or undefined
+    if (object1 !== object2) return false;
+    return true;
   }
-  //Loop through all items in both array and compare each items with same index.
-  for (let i = 0; i < firstArray.length; i++) {
-    if (firstArray[i] !== secondArray[i]) {
+  
+  //If object1 and object2 are arrays, compare two arrays
+  if (Array.isArray(object1)) {
+    if (!Array.isArray(object2)) return false;
+    if (object1.length !== object2.length) return false;
+    for (const index in object1) {
+      if (!eqObjects(object1[index], object2[index])) return false;
+    }
+    return true;
+  }
+  
+  //At this point, object1 is an object. So we need to compare two objects
+  //Check if two objects has same number of keys
+  // console.log('object1: ',object1, 'is a object with ' , Object.keys(object1).length, ' keys');
+  // console.log('object2: ',object2, 'is a object with ', Object.keys(object2).length, ' keys');
+  // console.log('*******************');
+  
+  if (Object.keys(object1).length !== Object.keys(object2).length) return false;
+  
+  //Loop through all keys in object1
+  for (const key in object1) {
+    //Check if key exist in object2
+    if (!object2[key] && object2[key] !== undefined) {
+      console.log(object2[key], 'is cause false.');
       return false;
     }
+    //Compare object1 and object2 resursively
+    if (!eqObjects(object1[key], object2[key])) return false;
   }
+
   return true;
 };
 
 //Testing...
-const ab = { a: "1", b: "2" };
-const ba = { b: "2", a: "1" };
-const abc = { a: "1", b: "2", c: "3" };
-const acb = { a: "1", c: "2", b: "3" };
-const abd = { a: "1", b: "2", d: "3" };
-console.log(eqObjects(ab, ba)); // => true
-console.log(eqObjects(acb, abc)); // => false
-console.log(eqObjects(abc, abd)); // => false
+// console.log(eqObjects({ a: { z: 1 }, b: 2 }, { a: { z: 1 }, b: 2 })); // => true
+// console.log(eqObjects({ a: { y: 0, z: 1 }, b: 2 }, { a: { z: 1 }, b: 2 })); // => false
+// console.log(eqObjects({ a: { y: 0, z: 1 }, b: 2 }, { a: 1, b: 2 })); // => false
+// console.log(eqObjects('a', 'a')); // => true
+// console.log(eqObjects([1,2,3], [1,2,3])); // => true
+// console.log(eqObjects([1,2,3], [1,3,2])); // => false
+// console.log(eqObjects([[1, 2, [[3], 4]], 5, []], [[1, 2, [[3], 4]], 5, []])); //=> true
 
-const cd = { c: "1", d: ["2", 3] };
-const dc = { d: ["2", 3], c: "1" };
-const cd2 = { c: "1", d: ["2", 3, 4] };
-console.log(eqObjects(cd, dc)); // => true
-console.log(eqObjects(cd, cd2)); // => false
+//The SUPER test 1:
+console.log('The SUPER test 1:');
+console.log(eqObjects({
+  a: [[[1, 2, [[3], 4]], 5, []], [[1, 2, [[3], 4]], 5, []]],
+  b: { c: ['abc', 123, null], d: [undefined, NaN] }
+}, {
+  b: { c: ['abc', 123, null], d: [undefined, NaN] },
+  a: [[[1, 2, [[3], 4]], 5, []], [[1, 2, [[3], 4]], 5, []]]
+}
+)); //=> true
+
+//The SUPER test 2:
+console.log('The SUPER test 2:');
+console.log(eqObjects({
+  a: [[[1, 2, [[3], 4]], 5, []], [[1, 2, [[3], 4]], 5, []]],
+  b: { c: ['abc', 123, null], d: [undefined, NaN] },
+  e: [1, 2]
+}, {
+  b: { c: ['abc', 123, null], d: [undefined, NaN] },
+  e: [2, 1],
+  a: [[[1, 2, [[3], 4]], 5, []], [[1, 2, [[3], 4]], 5, []]]
+}
+)); //=> true
