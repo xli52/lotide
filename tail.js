@@ -8,4 +8,4 @@ const tail = function(array) {
   }
 };
 
-assertEqual(tail([1,2,4]).length, 2);
+module.exports = tail;
