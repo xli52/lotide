@@ -1,5 +1,3 @@
-const assertEqual = require('./assertEqual');
-
 const eqArrays = function (firstArray, secondArray) {
   
   //Edge cases: check if two arrays have some amount of items and length are not zero.
