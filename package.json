@@ -1,7 +1,7 @@
 {
-  "name": "lotide",
+  "name": "@michaelli52/lotide",
   "version": "1.0.0",
-  "description": "",
+  "description": "A mini clone of Lodash",
   "main": "assertArraysEqual.js",
   "directories": {
     "test": "test"
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/michaelli52/lotide.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Xiang Li",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/michaelli52/lotide/issues"
